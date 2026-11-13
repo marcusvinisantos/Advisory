@@ -136,8 +136,6 @@ The payload `<svg onload=alert('poc-san')>` stored in the **Title** field is ren
 
 [![Stored XSS execution — alert('poc-san')](images/poc-02-execution.jpg)](https://github.com/marcusvinisantos/Advisory/blob/main/poc-02-execution.jpg)
 
-> **Note:** Remove tokens, cookies, credentials, personal data, internal addresses, and other secrets before publication.
-
 ---
 
 ## 8. Proof of concept
@@ -279,12 +277,8 @@ A research group of students and instructors from **RedScan Academy**.
 ## 16. References
 
 - Vendor repository: https://github.com/modified-shop/modified-shop
-- [Vendor advisory link — to be completed]
-- [CVE record link — to be completed]
-- [NVD link — to be completed]
 - CWE-79: https://cwe.mitre.org/data/definitions/79.html
 - CAPEC-592: https://capec.mitre.org/data/definitions/592.html
-- [Patch / commit link — to be completed]
 
 ---
 
