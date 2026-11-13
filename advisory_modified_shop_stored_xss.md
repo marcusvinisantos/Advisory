@@ -1,6 +1,6 @@
 # Security Advisory — Stored Cross-Site Scripting (XSS) in Modified eCommerce Shopsoftware (Currencies "Title" field)
 
-> **Identifier:** [CVE-YYYY-NNNNN / internal ID — to be assigned]
+
 > **Publication date:** 12/11/2026
 > **Last updated:** 12/11/2026
 > **Severity:** Medium
@@ -24,7 +24,7 @@ The responsible vendor was notified on **[date — to be completed]** and **[sum
 
 | Product / Component | Affected versions | Fixed version | Status |
 |---|---:|---:|---|
-| Modified eCommerce Shopsoftware | [all versions up to the tested build — to be confirmed] | [to be confirmed] | Affected |
+| Modified eCommerce Shopsoftware | v3.3.0-r16825 | [to be confirmed] | Affected |
 
 ### Unaffected products
 
@@ -130,11 +130,11 @@ The payload `<svg onload=alert('poc-san')>` stored in the **Title** field is ren
 
 **Stored payload in the "Title" field:**
 
-![Stored XSS payload in the Currencies Title field](images/poc-01-stored-payload.jpg)
+[![Stored XSS payload in the Currencies Title field](images/poc-01-stored-payload.jpg)](https://github.com/marcusvinisantos/Advisory/blob/main/poc-01-stored-payload.jpg)
 
 **Payload execution (JavaScript alert fires):**
 
-![Stored XSS execution — alert('poc-san')](images/poc-02-execution.jpg)
+[![Stored XSS execution — alert('poc-san')](images/poc-02-execution.jpg)](https://github.com/marcusvinisantos/Advisory/blob/main/poc-02-execution.jpg)
 
 > **Note:** Remove tokens, cookies, credentials, personal data, internal addresses, and other secrets before publication.
 
@@ -260,7 +260,7 @@ admin/currencies\.php.*(title=).*(%3C|<)(svg|script|img|iframe).*(onload|onerror
 
 ## 15. Credits
 
-![RedScan Research Team](images/credits.jpg)
+[RedScan Research Team](https://redscanacademy.com/)
 
 The vulnerability was identified and reported by the **RedScan Research Team**:
 
@@ -278,10 +278,10 @@ A research group of students and instructors from **RedScan Academy**.
 
 ## 16. References
 
+- Vendor repository: https://github.com/modified-shop/modified-shop
 - [Vendor advisory link — to be completed]
 - [CVE record link — to be completed]
 - [NVD link — to be completed]
-- [Product documentation link — to be completed]
 - CWE-79: https://cwe.mitre.org/data/definitions/79.html
 - CAPEC-592: https://capec.mitre.org/data/definitions/592.html
 - [Patch / commit link — to be completed]
@@ -310,6 +310,4 @@ Use of the information in this document is the sole responsibility of the reader
 
 For corrections, updates, or additional information:
 
-- **Email:** [EMAIL]
-- **Website:** [WEBSITE]
-- **PGP key:** [LINK OR FINGERPRINT]
+- **Email:**marcus.vini.gyn@gmail.com
