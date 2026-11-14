@@ -1,12 +1,12 @@
 # Security Advisory — Stored Cross-Site Scripting (XSS) in Modified eCommerce Shopsoftware (Currencies "Title" field)
-
+![RedScan Research Team](https://img.shields.io/badge/REDSCAN-RESEARCH_TEAM-red?style=flat-square&labelColor=555555) ![CWE-79](https://img.shields.io/badge/CWE--79-555555?style=flat-square) ![Stored XSS](https://img.shields.io/badge/STORED_XSS-orange?style=flat-square) ![Severity Medium](https://img.shields.io/badge/SEVERITY-MEDIUM-yellow?style=flat-square&labelColor=555555)
 
 > **Publication date:** 12/11/2026
 > **Last updated:** 12/11/2026
 > **Severity:** Medium
 > **CVSS:** 5.4 — `CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N`
 > **CWE:** CWE-79 — Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')
-> **Status:** Under investigation / vendor notification in progress
+> **Status:** Under investigation
 
 ---
 
@@ -16,20 +16,18 @@ A stored Cross-Site Scripting (XSS) vulnerability was identified in **Modified e
 
 Successful exploitation can result in **execution of arbitrary JavaScript in the context of the administration panel**, enabling session/cookie theft, actions performed on behalf of the victim administrator, and back-end interface manipulation.
 
-The responsible vendor was notified on **[date — to be completed]** and **[summary of the vendor response — to be completed]**.
-
 ---
 
 ## 2. Affected products
 
-| Product / Component | Affected versions | Fixed version | Status |
-|---|---:|---:|---|
-| Modified eCommerce Shopsoftware | v3.3.0-r16825 | [to be confirmed] | Affected |
+- **Product:** modified eCommerce Shopsoftware (xt-commerce / osCommerce base)
+- **Analyzed version:** `3.3.0-r16825`
+- **Component:** `admin/currencies.php`
+- **Endpoint:** `/admin/currencies.php?page=1&cID=<id>&action=edit`
+- **Vendor repository:** `https://github.com/modified-shop/modified-shop`
+- **Access vector:** authenticated administrative panel ( `/admin/` )
 
-### Unaffected products
-
-- [Product or version not affected — to be confirmed]
-
+**Unaffected products/versions:** not assessed. The analysis was limited to the version above.
 ---
 
 ## 3. Vulnerability description
@@ -120,6 +118,24 @@ Cookie: [AUTHENTICATED-ADMIN-SESSION]
 title=<svg onload=alert('poc-san')>&code=AAA&symbol_left=$&symbol_right=&decimal_point=.&thousands_point=,&decimal_places=2
 ```
 
+### Vulnerable code
+
+Input and persistence — the value is stored as-is, with no output encoding applied on render:
+
+```php
+$title = xtc_db_prepare_input($_POST['title']);
+$code = xtc_db_prepare_input($_POST['code']);
+$symbol_left = xtc_db_prepare_input($_POST['symbol_left']);
+$symbol_right = xtc_db_prepare_input($_POST['symbol_right']);
+
+$sql_data_array = array(
+  'title' => $title,
+  'code' => $code,
+  'symbol_left' => $symbol_left,
+  'symbol_right' => $symbol_right
+);
+```
+
 ### Observed response
 
 The stored value is returned unencoded within the currencies listing, causing the injected element to be parsed and its event handler to execute.
@@ -128,13 +144,26 @@ The stored value is returned unencoded within the currencies listing, causing th
 
 The payload `<svg onload=alert('poc-san')>` stored in the **Title** field is rendered as live HTML, and the `onload` handler runs, confirming arbitrary JavaScript execution in the administration panel. The screenshots below show the stored payload and its execution.
 
-**Stored payload in the "Title" field:**
+### Screenshots
 
-[![Stored XSS payload in the Currencies Title field](images/poc-01-stored-payload.jpg)](https://github.com/marcusvinisantos/Advisory/blob/main/poc-01-stored-payload.jpg)
-
-**Payload execution (JavaScript alert fires):**
-
-[![Stored XSS execution — alert('poc-san')](images/poc-02-execution.jpg)](https://github.com/marcusvinisantos/Advisory/blob/main/poc-02-execution.jpg)
+<table>
+  <tr>
+    <td align="center"><b>Step 1 — Stored payload in the "Title" field</b></td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="poc-01-stored-payload.jpg" alt="Stored XSS payload stored in the Currencies Title field" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><b>Step 2 — Payload execution: the JavaScript alert fires</b></td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="poc-02-execution.jpg" alt="Stored XSS execution — alert('poc-san') dialog" width="100%">
+    </td>
+  </tr>
+</table>
 
 ---
 
@@ -208,6 +237,15 @@ It is recommended to:
 4. Review logs prior to the update.
 5. Confirm the vulnerable behavior can no longer be reproduced.
 
+Apply context-aware output encoding on every rendered output of the currency title:
+
+```php
+htmlspecialchars(
+  $currency['title'],
+  ENT_QUOTES | ENT_SUBSTITUTE,
+  'UTF-8'
+)
+```
 ### Implemented change
 
 [High-level description of the vendor fix — to be completed. Expected: context-aware output encoding (HTML entity encoding) of the currency title when rendered, and/or server-side input validation.]
@@ -276,7 +314,6 @@ A research group of students and instructors from **RedScan Academy**.
 
 ## 16. References
 
-- Vendor repository: https://github.com/modified-shop/modified-shop
 - CWE-79: https://cwe.mitre.org/data/definitions/79.html
 - CAPEC-592: https://capec.mitre.org/data/definitions/592.html
 
