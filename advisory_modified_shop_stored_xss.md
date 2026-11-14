@@ -316,6 +316,7 @@ A research group of students and instructors from **RedScan Academy**.
 
 - CWE-79: https://cwe.mitre.org/data/definitions/79.html
 - CAPEC-592: https://capec.mitre.org/data/definitions/592.html
+- Vector: [`CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N`](https://www.first.org/cvss/calculator/3.1#CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N) — 5.4 (Medium)
 
 ---
 
@@ -341,4 +342,4 @@ Use of the information in this document is the sole responsibility of the reader
 
 For corrections, updates, or additional information:
 
-- **Email:**marcus.vini.gyn@gmail.com
+- Email: marcus.vini.gyn@gmail.com
